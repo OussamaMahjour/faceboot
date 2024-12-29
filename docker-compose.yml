@@ -1,0 +1,241 @@
+services:
+
+
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./user-service:/app
+    ports:
+      - 8080:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
+      interval:  10s
+      retries:  4
+    depends_on:
+      - user-db
+        
+
+
+  user-db:
+    container_name: user-db
+    image: mysql:8.0
+    volumes:
+      - ./storage/user-db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root 
+    ports:
+      - 3306:3306
+    
+
+
+
+  authentification-service:
+    container_name: authentification-service
+    build:
+      context: ./authentification-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./authentification-service:/app
+    ports:
+      - 8081:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8081/actuator/health" ]
+      interval:  10s
+      retries:  4
+
+    depends_on:
+      - authentification-db
+
+
+  authentification-db:
+    container_name: authentification-db
+    image: redis:7.4.1-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./storage/authentification-db:/data
+    restart: always
+    
+
+  discovery-service:
+    container_name: discovery-service
+    build:
+      context: ./discovery-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./discovery-service:/app
+    ports:
+      - 8082:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8082/actuator/health" ]
+      interval:  10s
+      retries:  4
+
+
+
+  config-service:
+    container_name: config-service
+    build:
+      context: ./config-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./config-service:/app
+    ports:
+      - 8083:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8083/actuator/health" ]
+      interval:  10s
+      retries:  4
+
+
+
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: ./gateway-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./gateway-service:/app
+    ports:
+      - 8084:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8084/actuator/health" ]
+      interval:  10s
+      retries:  4
+
+
+
+  comment-service:
+    container_name: comment-service
+    build:
+      context: ./comment-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./comment-service:/app
+    ports:
+      - 8085:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8085/actuator/health" ]
+      interval:  10s
+      retries:  4
+    depends_on:
+      - comment-db
+    
+  comment-db:
+    image: mvertes/alpine-mongo
+    container_name: comment-db
+    volumes:
+      - ./storage/comment-db:/data/db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27010:27017"
+    
+
+
+
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./notification-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./notification-service:/app
+    ports:
+      - 8086:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8086/actuator/health" ]
+      interval:  10s
+      retries:  4
+    depends_on:
+      - notification-db
+
+  notification-db:
+    container_name: notification-db
+    image: redis:7.4.1-alpine
+    ports:
+      - "6378:6379"
+    volumes:
+      - ./storage/notification-db:/data
+    restart: always
+    
+
+
+
+  post-service:
+    container_name: post-service
+    build:
+      context: ./post-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./post-service:/app
+    ports:
+      - 8087:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8087/actuator/health" ]
+      interval:  10s
+      retries:  4
+    depends_on:
+      - post-db
+
+  post-db:
+    image: mvertes/alpine-mongo
+    container_name: post-db
+    volumes:
+      - ./storage/post-db:/data/db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27017:27017"
+    
+
+
+  security-service:
+    container_name: security-service
+    build:
+      context: ./security-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./security-service:/app
+    ports:
+      - 8088:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8088/actuator/health" ]
+      interval:  10s
+      retries:  4
+
+
+  media-service:
+    container_name: media-service
+    build:
+      context: ./media-service 
+      dockerfile: ../docker/spring-boot/Dockerfile
+    # volumes:
+    #   - ./media-serivce:/app
+    ports:
+      - 8089:8080
+    healthcheck:
+      test: [ "CMD","curl","-f", "http://localhost:8089/actuator/health" ]
+      interval:  10s
+      retries:  4
+    depends_on:
+      - media-db
+
+  media-db:
+    image: mvertes/alpine-mongo
+    container_name: media-db
+    volumes:
+      - ./storage/media-db:/data/db
+      - ./storage/media-storage:/media/storage
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_PASSWORD: root
+    ports:
+      - "27018:27017"
