@@ -1,4 +1,4 @@
-package com.faceboot.user_service.user_service;
+package com.faceboot.user_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
