@@ -10,7 +10,7 @@ services:
     # volumes:
     #   - ./user-service:/app
     ports:
-      - 8080:8080
+      - 8090:8080
     healthcheck:
       test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
@@ -239,3 +239,15 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - "27018:27017"
+  
+  client:
+    container_name: client
+    build: 
+      context: ./client
+      dockerfile: ../docker/react/Dockerfile
+    volumes:
+      - ./client:/app
+    ports:
+      - 8080:8080
+    
+
