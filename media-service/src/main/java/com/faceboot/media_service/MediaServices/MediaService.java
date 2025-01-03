@@ -83,13 +83,15 @@ public class MediaService implements MediaServiceInterface {
     @Override
     public String deleteBypostId(Long postId, Long user_id) {
         String uploadDir = new File("/media/storage").getAbsolutePath();
-        File userFolder = new File(uploadDir+"/"+"User_"+user_id);
-        File postFolder = new File(userFolder+"/"+"Post_"+postId);
+        File userFolder = new File(uploadDir+"/User_"+user_id);
+        File postFolder = new File(userFolder+"/Post_"+postId);
         File destinationFile = new File(postFolder.getAbsolutePath());
         if(postFolder.exists()) {
             try{
-                String[] path = new String[]{"del","/f",userFolder+"\\"+"Post_"+postId+"\\user"+user_id+"_post"+postId+"_1.jpg"};
-                System.out.println(path[2]);
+//                String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+postId};
+//                System.out.println(path[3]);
+//                Runtime.getRuntime().exec(path);
+                String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + postId};
                 Runtime.getRuntime().exec(path);
                 return "deleted";
             } catch (Exception e) {
