@@ -85,17 +85,19 @@ public class MediaService implements MediaServiceInterface {
         String uploadDir = new File("/media/storage").getAbsolutePath();
         File userFolder = new File(uploadDir+"/User_"+user_id);
         File postFolder = new File(userFolder+"/Post_"+postId);
-        File destinationFile = new File(postFolder.getAbsolutePath());
         if(postFolder.exists()) {
             try{
-//                String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+postId};
-//                System.out.println(path[3]);
-//                Runtime.getRuntime().exec(path);
-                String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + postId};
+                // for windows use those 2 lines below
+                //String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+postId};//enable this if you
+                //wana test it on windows
+                int deletedMedias = mediaRepository.deleteAllByPostId(postId);
+                String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + postId}; //enable this if you
+                //wana add it to docker
                 Runtime.getRuntime().exec(path);
-                return "deleted";
+                return deletedMedias+" rows Deleted successfully !";
             } catch (Exception e) {
                 e.printStackTrace();
+                return e.getMessage();
             }
 
             /*file.transferTo(destinationFile); // Save the file
@@ -109,10 +111,10 @@ public class MediaService implements MediaServiceInterface {
 
         }
              */
-            return "post founded ";
+
         }
         else {
-            return "post not found";
+            return "Not found ";
         }
     }
 }
