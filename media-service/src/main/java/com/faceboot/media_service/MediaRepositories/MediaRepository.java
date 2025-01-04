@@ -12,4 +12,5 @@ public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
     @Transactional
     int deleteAllByPostId(Long postId);
 
+
 }

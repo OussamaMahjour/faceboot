@@ -14,5 +14,6 @@ public interface MediaServiceInterface {
                                         String media_type,
                                         String media_content,
                                         MultipartFile file) throws IOException ;
-    String deleteBypostId(Long postId, Long user_id);
+    String deleteBypostId(Long user_id, Long post_id);
+
 }

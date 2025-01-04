@@ -19,10 +19,13 @@ import java.util.Optional;
 public class MediaService implements MediaServiceInterface {
     MediaRepository mediaRepository;
     MediaMapperInterface mediaMapper;
+    String uploadDir = new File("/media/storage").getAbsolutePath();
+
     public MediaService(MediaRepository mediaRepository, MediaMapperInterface mediaMapper) {
         this.mediaRepository = mediaRepository;
         this.mediaMapper = mediaMapper;
     }
+
     @Override
     public List<Optional<MediaResponseDTO>> findAll() {
         List<MediaEntity> mediaList = mediaRepository.findAll();
@@ -32,6 +35,7 @@ public class MediaService implements MediaServiceInterface {
         }
         return mediaResponseDTOList;
     }
+
     @Override
     public List<Optional<MediaResponseDTO>> findByPostId(Long post_id) {
         List<MediaEntity> mediaList = mediaRepository.findAllByPostId(post_id);
@@ -41,14 +45,15 @@ public class MediaService implements MediaServiceInterface {
         }
         return mediaResponseDTOList;
     }
+
     @Override
     public Optional<MediaResponseDTO> addMedia(String user_id,
                                                String postId,
                                                String media_type,
                                                String media_content,
                                                MultipartFile file) throws IOException {
-        String uploadDir = new File("/media/storage").getAbsolutePath();
-        File userFolder = new File(uploadDir+"/"+"User_"+user_id);
+        //String uploadDir = new File("/media/storage").getAbsolutePath();
+        File userFolder = new File(this.uploadDir+"/"+"User_"+user_id);
         File postFolder = new File(userFolder+"/"+"Post_"+postId);
         String filePath = postFolder + "/"+file.getOriginalFilename();
         File destinationFile = new File(filePath);
@@ -80,18 +85,22 @@ public class MediaService implements MediaServiceInterface {
         }
     }
 
+
+
+
+
     @Override
-    public String deleteBypostId(Long postId, Long user_id) {
-        String uploadDir = new File("/media/storage").getAbsolutePath();
-        File userFolder = new File(uploadDir+"/User_"+user_id);
-        File postFolder = new File(userFolder+"/Post_"+postId);
+    public String deleteBypostId(Long user_id, Long post_id) {
+        //String uploadDir = new File("/media/storage").getAbsolutePath();
+        File userFolder = new File(this.uploadDir+"/User_"+user_id);
+        File postFolder = new File(userFolder+"/Post_"+post_id);
         if(postFolder.exists()) {
             try{
                 // for windows use those 2 lines below
-                //String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+postId};//enable this if you
+                String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+post_id};//enable this if you
                 //wana test it on windows
-                int deletedMedias = mediaRepository.deleteAllByPostId(postId);
-                String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + postId}; //enable this if you
+                int deletedMedias = mediaRepository.deleteAllByPostId(post_id);
+                //String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + post_id}; //enable this if you
                 //wana add it to docker
                 Runtime.getRuntime().exec(path);
                 return deletedMedias+" rows Deleted successfully !";
@@ -99,19 +108,6 @@ public class MediaService implements MediaServiceInterface {
                 e.printStackTrace();
                 return e.getMessage();
             }
-
-            /*file.transferTo(destinationFile); // Save the file
-            MediaRequestDTO mediaRequestDTO = MediaRequestDTO.builder()
-                    .postId(Long.parseLong(postId))
-                    .type(MediaType.valueOf((media_type)))
-                    .path(filePath)
-                    .content(media_content)
-                    .build();
-            return Optional.ofNullable(mediaMapper.toMediaResponseDTO(mediaRepository.save(mediaMapper.toMediaEntity(mediaRequestDTO))));
-
-        }
-             */
-
         }
         else {
             return "Not found ";
