@@ -7,6 +7,7 @@ import com.faceboot.media_service.MediaEntities.MediaType;
 import com.faceboot.media_service.MediaMapper.MediaMapperInterface;
 import com.faceboot.media_service.MediaRepositories.MediaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -88,7 +89,7 @@ public class MediaService implements MediaServiceInterface {
 
 
 
-
+    @Transactional
     @Override
     public String deleteBypostId(Long user_id, Long post_id) {
         //String uploadDir = new File("/media/storage").getAbsolutePath();
@@ -97,10 +98,10 @@ public class MediaService implements MediaServiceInterface {
         if(postFolder.exists()) {
             try{
                 // for windows use those 2 lines below
-                String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+post_id};//enable this if you
+                //String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+post_id};//enable this if you
                 //wana test it on windows
                 int deletedMedias = mediaRepository.deleteAllByPostId(post_id);
-                //String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + post_id}; //enable this if you
+                String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + post_id}; //enable this if you
                 //wana add it to docker
                 Runtime.getRuntime().exec(path);
                 return deletedMedias+" rows Deleted successfully !";

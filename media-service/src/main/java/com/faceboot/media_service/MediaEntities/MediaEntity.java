@@ -1,7 +1,7 @@
 package com.faceboot.media_service.MediaEntities;
-
-import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @AllArgsConstructor
@@ -9,14 +9,12 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
-@Entity
 @ToString
+@Document(value = "media")
 public class MediaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private Long postId;
-    @Enumerated(EnumType.STRING)
     private MediaType type;
     private String content;
     private String path;

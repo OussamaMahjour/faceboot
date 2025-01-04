@@ -236,9 +236,13 @@ services:
       - ./storage/media-storage:/media/storage
     restart: always
     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: media
     ports:
-      - "27018:27017"
+      - "27017:27017"
+    expose:
+      - "27017"
   
   client:
     container_name: client

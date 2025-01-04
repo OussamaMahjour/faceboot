@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @ToString
 public class MediaResponseDTO {
-    private Long id;
+    private String id;
     private Long postId;
     private MediaType type;
     private String content;
