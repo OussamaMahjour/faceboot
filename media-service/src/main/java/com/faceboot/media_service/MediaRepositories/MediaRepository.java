@@ -8,8 +8,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface MediaRepository extends MongoRepository <MediaEntity, String> {
-    List<MediaEntity> findAllByPostId(Long id);
-    int deleteAllByPostId(Long postId);
+    List<MediaEntity> findAllByPostId(String id);
+    int deleteAllByPostId(String postId);
 
 
 }
