@@ -233,6 +233,7 @@ services:
     container_name: media-db
     volumes:
       - ./storage/media-db:/data/db
+      #- ./init-scripts:/docker-entrypoint-initdb.d  # Mount for initialization scripts
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
