@@ -34,6 +34,7 @@ public class MediaService implements MediaServiceInterface {
         for (MediaEntity mediaEntity : mediaList) {
             mediaResponseDTOList.add(Optional.ofNullable(mediaMapper.toMediaResponseDTO(mediaEntity)));
         }
+        System.out.println("helooooooooo");
         return mediaResponseDTOList;
     }
 
@@ -48,7 +49,7 @@ public class MediaService implements MediaServiceInterface {
     }
 
     @Override
-    public Optional<MediaResponseDTO> addMedia(String user_id,
+    public Optional<MediaEntity> addMedia(String user_id,
                                                String postId,
                                                String media_type,
                                                String media_content,
@@ -60,25 +61,28 @@ public class MediaService implements MediaServiceInterface {
         File destinationFile = new File(filePath);
         if(userFolder.exists() && postFolder.exists()) {
             file.transferTo(destinationFile); // Save the file
-            MediaRequestDTO mediaRequestDTO = MediaRequestDTO.builder()
+            System.out.println("Just before building the entity !");
+            MediaEntity mediatosave = MediaEntity.builder()
                     .postId(postId)
                     .type(MediaType.valueOf((media_type)))
                     .path(filePath)
                     .content(media_content)
                     .build();
-            return Optional.ofNullable(mediaMapper.toMediaResponseDTO(mediaRepository.save(mediaMapper.toMediaEntity(mediaRequestDTO))));
+            System.out.println(mediatosave.toString());
+            return Optional.of(mediaRepository.save(mediatosave));
         }
         else {
             boolean post_folder_created = postFolder.mkdirs();
             if(post_folder_created) {
                 file.transferTo(destinationFile); // Save the file
-                MediaRequestDTO mediaRequestDTO = MediaRequestDTO.builder()
+                MediaEntity mediatosave = MediaEntity.builder()
                         .postId(postId)
                         .type(MediaType.valueOf((media_type)))
                         .path(filePath)
                         .content(media_content)
                         .build();
-                return Optional.ofNullable(mediaMapper.toMediaResponseDTO(mediaRepository.save(mediaMapper.toMediaEntity(mediaRequestDTO))));
+                System.out.println(mediatosave.toString());
+                return Optional.of(mediaRepository.save(mediatosave));
             }else{
 
                 return Optional.empty();

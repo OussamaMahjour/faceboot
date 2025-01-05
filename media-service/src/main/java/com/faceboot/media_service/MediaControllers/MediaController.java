@@ -1,5 +1,6 @@
 package com.faceboot.media_service.MediaControllers;
 import com.faceboot.media_service.MediaDTO.MediaResponseDTO;
+import com.faceboot.media_service.MediaEntities.MediaEntity;
 import com.faceboot.media_service.MediaServices.MediaServiceInterface;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,11 +26,11 @@ public class MediaController {
     }
 
     @PostMapping("/upload")
-    public Optional<MediaResponseDTO> uploadPost(@RequestParam("user_id") String user_id,
-                                                 @RequestParam("post_id") String postId,
-                                                 @RequestParam("type") String media_type,
-                                                 @RequestParam("content") String media_content,
-                                                 @RequestParam("media") MultipartFile file) throws IOException {
+    public Optional<MediaEntity> uploadPost(@RequestParam("user_id") String user_id,
+                                            @RequestParam("post_id") String postId,
+                                            @RequestParam("type") String media_type,
+                                            @RequestParam("content") String media_content,
+                                            @RequestParam("media") MultipartFile file) throws IOException {
         return mediaService.addMedia(user_id, postId, media_type, media_content, file);
     }
     @DeleteMapping("/delete/postid/{post_id}/{user_id}")
