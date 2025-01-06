@@ -222,14 +222,14 @@ services:
     ports:
       - 8089:8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8089/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
     depends_on:
       - media-db
 
   media-db:
-    image: mvertes/alpine-mongo
+    image: mongo:7.0.5
     container_name: media-db
     volumes:
       - ./storage/media-db:/data/db
