@@ -3,33 +3,27 @@ package com.faceboot.comment_service.clientMock;
 import com.faceboot.comment_service.client.PostClient;
 import com.faceboot.comment_service.model.Post;
 import com.faceboot.comment_service.model.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 
 @Component
-public class PostClientMock implements PostClient {
 
+public class PostClientMock implements PostClient {
+    UserClientMock userClientMock = new UserClientMock();
     @Override
-    public Post getPostById(Long id) {
-        User user = new User().builder()
-                .id(1L)
-                .name("oussama")
-                .createdAt(LocalDateTime.now())
-                .email("oussama@gmail.com")
-                .deletedAt(null)
-                .gender("male")
-                .password("123456")
-                .verified(false)
-                .build();
-        Post post = Post.builder()
-                .votes(id)
+    public Post getPostById(String id) {
+        User user = userClientMock.getUserById(RandomGenerator.getDefault().nextLong());
+        return Post.builder()
+                .votes(12L)
                 .user(user)
                 .medias(null)
                 .createdAt(LocalDateTime.now())
-                .id(1L)
+                .id(id)
                 .build();
-        return post;
     }
 }

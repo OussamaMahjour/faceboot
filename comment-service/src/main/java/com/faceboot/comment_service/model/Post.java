@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Post {
-    private Long id;
+    private String id;
     private User user;
     private LocalDateTime createdAt;
     private Long votes;

@@ -51,7 +51,7 @@ public class CommentService implements CommentServiceInterface {
     }
 
     @Override
-    public String deleteCommentByPostId(long postId) {
+    public String deleteCommentsByPostId(String postId) {
         List<Comment> comments = commentRepository.findCommentsByPostId(postId);
         if(comments.isEmpty()){
             return "post have no comments or doesn't exist";
@@ -61,11 +61,21 @@ public class CommentService implements CommentServiceInterface {
     }
 
     @Override
+    public List<CommentResponseDTO> getAllCommentsByPostId(String postId) {
+        return commentRepository.findCommentsByPostId(postId).stream().map(
+                commentMapper::commentToCommentResponseDTO
+        ).toList();
+    }
+
+    @Override
     public CommentResponseDTO addComment(CommentRequestDTO commentRequestDTO){
         Comment comment = commentMapper.commentRequestDTOToComment(commentRequestDTO);
         commentRepository.save(comment);
         return commentMapper.commentToCommentResponseDTO(comment);
     }
+
+
+
 
 
 

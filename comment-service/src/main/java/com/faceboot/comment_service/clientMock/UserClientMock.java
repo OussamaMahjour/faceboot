@@ -20,7 +20,6 @@ public class UserClientMock  implements UserClient {
                 .email("oussama@gmail.com")
                 .deletedAt(null)
                 .gender("male")
-                .password("123456")
                 .verified(false)
                 .build();
         return user;

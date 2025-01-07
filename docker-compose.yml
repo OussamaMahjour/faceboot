@@ -149,16 +149,20 @@ services:
     depends_on:
         config-service:
             condition: service_healthy
+        comment-db:
+          condition: service_started
 
     
   comment-db:
-    image: mvertes/alpine-mongo
+    image: mongo:7.0.5
     container_name: comment-db
     volumes:
       - ./storage/comment-db:/data/db
     restart: always
     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: comment
     ports:
       - "27010:27017"
     

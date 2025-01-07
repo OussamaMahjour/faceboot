@@ -13,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "post",url="http://localhost:8081")
 public interface PostClient {
     @RequestMapping(method= RequestMethod.GET,value="/post/byId")
-    Post getPostById(@RequestParam("id") Long id);
+    Post getPostById(@RequestParam("id") String id);
 }

@@ -10,5 +10,6 @@ public interface CommentServiceInterface  {
     public CommentResponseDTO getCommentById(String id);
     public CommentResponseDTO addComment(CommentRequestDTO commentRequestDTO);
     public String deleteCommentById(String id);
-    public String deleteCommentByPostId(long postId);
+    public String deleteCommentsByPostId(String postId);
+    public List<CommentResponseDTO> getAllCommentsByPostId(String postId);
 }

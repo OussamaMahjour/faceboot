@@ -10,8 +10,8 @@ import java.util.List;
 //@RepositoryRestResource
 public interface CommentRepository extends MongoRepository<Comment,String> {
 
-    public List<Comment> findCommentsByPostId(long postId);
-    public void deleteCommentsByPostId(long postId);
+    public List<Comment> findCommentsByPostId(String postId);
+    public void deleteCommentsByPostId(String postId);
     public Comment findCommentById(String id);
 
 }

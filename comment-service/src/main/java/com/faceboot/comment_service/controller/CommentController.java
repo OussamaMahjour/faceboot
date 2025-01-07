@@ -40,8 +40,13 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete/byPost/{postId}")
-    public String deleteByPost(@PathVariable("postId") long postId) {
-        return commentServiceInterface.deleteCommentByPostId(postId);
+    public String deleteByPost(@PathVariable("postId") String postId) {
+        return commentServiceInterface.deleteCommentsByPostId(postId);
+    }
+
+    @GetMapping("/byPost/{postId}")
+    public List<CommentResponseDTO> byPost(@PathVariable("postId") String postId) {
+        return commentServiceInterface.getAllCommentsByPostId(postId);
     }
 
 }
