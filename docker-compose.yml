@@ -71,8 +71,10 @@ services:
     #   - ./discovery-service:/app
     ports:
       - 8082:8080
+    expose:
+      - 8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8082/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
 
@@ -87,10 +89,17 @@ services:
     #   - ./config-service:/app
     ports:
       - 8083:8080
+    expose:
+      - 8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8083/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8080/eureka
+    depends_on:
+        discovery-service:
+          condition: service_healthy
 
 
 
@@ -103,10 +112,18 @@ services:
     #   - ./gateway-service:/app
     ports:
       - 8084:8080
+    expose:
+      -  8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8084/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8080/eureka
+      - CONFIG_SERVICE_URL=http://config-service:8080
+    depends_on:
+        comment-service:
+          condition: service_healthy
 
 
 
@@ -119,12 +136,20 @@ services:
     #   - ./comment-service:/app
     ports:
       - 8085:8080
+    expose:
+      - 8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8085/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
+
+    environment:
+        - DISCOVERY_SERVICE_URL=http://discovery-service:8080/eureka
+        - CONFIG_SERVICE_URL=http://config-service:8080
     depends_on:
-      - comment-db
+        config-service:
+            condition: service_healthy
+
     
   comment-db:
     image: mvertes/alpine-mongo
