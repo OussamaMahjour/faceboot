@@ -129,7 +129,6 @@ ___
 
 ```
 
-==NOTE:== 
-The Entities User and Post are just mocked and not actually coming from the services 
-    
+_NOTE:
+The Entities User and Post are just mocked and not actually coming from the services_ 
     
