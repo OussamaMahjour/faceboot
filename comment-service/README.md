@@ -25,16 +25,16 @@ You Could access a responsive documentation at ```/swagger-ui/index.html```
 
 
 
-- > ```/comment/delete/{id}```
+ > ```/comment/delete/{id}```
 
-### Response 
+- ### Response 
 If the id exist
 ``` "deleted succefully"``` 
 If Not
 ```"comment doesn't exist"```
-
-- > ```/comment/byPost/{postId}```
-### Response 
+___
+ > ```/comment/byPost/{postId}```
+- ### Response 
 If the id exist
 ```"comments deleted"```
 If Not
@@ -45,9 +45,9 @@ If Not
 
 
 
-- >```/comment/all```
+>```/comment/all```
 
-### Response
+- ### Response
 ```javascript
 [
   {
@@ -89,11 +89,10 @@ If Not
   }
 ]
 ```
+___
 
-
-
-- >```/comment/byPost/{postId}```
-### Response 
+>```/comment/byPost/{postId}```
+- ### Response 
 ```javascript
 [
   {
