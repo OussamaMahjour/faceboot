@@ -32,4 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 xml
-.idea/
+
+### IDEA ###
+.idea/codeStyles
+
