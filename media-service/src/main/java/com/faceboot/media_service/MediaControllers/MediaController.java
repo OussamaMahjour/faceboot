@@ -20,7 +20,7 @@ public class MediaController {
     }
 
     @GetMapping("/post/{post_id}")
-    public List<Optional<MediaResponseDTO>> findPostMedia(@PathVariable Long post_id) {
+    public List<Optional<MediaResponseDTO>> findPostMedia(@PathVariable String post_id) {
         return mediaService.findByPostId(post_id);
     }
 
@@ -33,7 +33,7 @@ public class MediaController {
         return mediaService.addMedia(user_id, postId, media_type, media_content, file);
     }
     @DeleteMapping("/delete/postid/{post_id}/{user_id}")
-    public String deletePostById(@PathVariable Long post_id, @PathVariable Long user_id) {
+    public String deletePostById(@PathVariable String post_id, @PathVariable String user_id) {
         return mediaService.deleteBypostId(post_id, user_id);
     }
 

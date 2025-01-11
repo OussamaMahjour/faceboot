@@ -1,16 +1,15 @@
 package com.faceboot.media_service.MediaRepositories;
 
 import com.faceboot.media_service.MediaEntities.MediaEntity;
-import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.JpaRepository;
-
+//import jakarta.transaction.Transactional;
+//import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-public interface MediaRepository extends JpaRepository<MediaEntity, Long> {
-    List<MediaEntity> findAllByPostId(Long id);
-    @Transactional
-    int deleteAllByPostId(Long postId);
+public interface MediaRepository extends MongoRepository <MediaEntity, String> {
+    List<MediaEntity> findAllByPostId(String id);
+    int deleteAllByPostId(String postId);
 
 
 }

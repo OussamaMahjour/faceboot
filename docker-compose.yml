@@ -71,8 +71,10 @@ services:
     #   - ./discovery-service:/app
     ports:
       - 8082:8080
+    expose:
+      - 8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8082/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
 
@@ -87,10 +89,17 @@ services:
     #   - ./config-service:/app
     ports:
       - 8083:8080
+    expose:
+      - 8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8083/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8080/eureka
+    depends_on:
+        discovery-service:
+          condition: service_healthy
 
 
 
@@ -103,10 +112,18 @@ services:
     #   - ./gateway-service:/app
     ports:
       - 8084:8080
+    expose:
+      -  8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8084/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
+    environment:
+      - DISCOVERY_SERVICE_URL=http://discovery-service:8080/eureka
+      - CONFIG_SERVICE_URL=http://config-service:8080
+    depends_on:
+        comment-service:
+          condition: service_healthy
 
 
 
@@ -119,21 +136,33 @@ services:
     #   - ./comment-service:/app
     ports:
       - 8085:8080
+    expose:
+      - 8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8085/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
+
+    environment:
+        - DISCOVERY_SERVICE_URL=http://discovery-service:8080/eureka
+        - CONFIG_SERVICE_URL=http://config-service:8080
     depends_on:
-      - comment-db
+        config-service:
+            condition: service_healthy
+        comment-db:
+          condition: service_started
+
     
   comment-db:
-    image: mvertes/alpine-mongo
+    image: mongo:7.0.5
     container_name: comment-db
     volumes:
       - ./storage/comment-db:/data/db
     restart: always
     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: comment
     ports:
       - "27010:27017"
     
@@ -218,27 +247,30 @@ services:
       context: ./media-service 
       dockerfile: ../docker/spring-boot/Dockerfile
     volumes:
-        - ./storage/media-storage:/media/storage
-    #   - ./media-serivce:/app
+      - ./storage/media-storage:/media/storage
     ports:
       - 8089:8080
     healthcheck:
-      test: [ "CMD","curl","-f", "http://localhost:8089/actuator/health" ]
+      test: [ "CMD","curl","-f", "http://localhost:8080/actuator/health" ]
       interval:  10s
       retries:  4
     depends_on:
       - media-db
 
   media-db:
-    image: mvertes/alpine-mongo
+    image: mongo:7.0.5
     container_name: media-db
     volumes:
       - ./storage/media-db:/data/db
     restart: always
     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: media
     ports:
-      - "27018:27017"
+      - "27017:27017"
+    expose:
+      - "27017"
   
   client:
     container_name: client

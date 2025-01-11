@@ -7,6 +7,7 @@ import com.faceboot.media_service.MediaEntities.MediaType;
 import com.faceboot.media_service.MediaMapper.MediaMapperInterface;
 import com.faceboot.media_service.MediaRepositories.MediaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -37,7 +38,7 @@ public class MediaService implements MediaServiceInterface {
     }
 
     @Override
-    public List<Optional<MediaResponseDTO>> findByPostId(Long post_id) {
+    public List<Optional<MediaResponseDTO>> findByPostId(String post_id) {
         List<MediaEntity> mediaList = mediaRepository.findAllByPostId(post_id);
         List<Optional<MediaResponseDTO>> mediaResponseDTOList = new ArrayList<>();
         for (MediaEntity mediaEntity : mediaList) {
@@ -60,7 +61,7 @@ public class MediaService implements MediaServiceInterface {
         if(userFolder.exists() && postFolder.exists()) {
             file.transferTo(destinationFile); // Save the file
             MediaRequestDTO mediaRequestDTO = MediaRequestDTO.builder()
-                    .postId(Long.parseLong(postId))
+                    .postId(postId)
                     .type(MediaType.valueOf((media_type)))
                     .path(filePath)
                     .content(media_content)
@@ -72,7 +73,7 @@ public class MediaService implements MediaServiceInterface {
             if(post_folder_created) {
                 file.transferTo(destinationFile); // Save the file
                 MediaRequestDTO mediaRequestDTO = MediaRequestDTO.builder()
-                        .postId(Long.parseLong(postId))
+                        .postId(postId)
                         .type(MediaType.valueOf((media_type)))
                         .path(filePath)
                         .content(media_content)
@@ -88,19 +89,19 @@ public class MediaService implements MediaServiceInterface {
 
 
 
-
+    @Transactional
     @Override
-    public String deleteBypostId(Long user_id, Long post_id) {
+    public String deleteBypostId(String user_id, String post_id) {
         //String uploadDir = new File("/media/storage").getAbsolutePath();
         File userFolder = new File(this.uploadDir+"/User_"+user_id);
         File postFolder = new File(userFolder+"/Post_"+post_id);
         if(postFolder.exists()) {
             try{
                 // for windows use those 2 lines below
-                String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+post_id};//enable this if you
+                //String[] path = new String[]{"cmd", "/c", "rmdir","/s", "/q",userFolder+"\\Post_"+post_id};//enable this if you
                 //wana test it on windows
                 int deletedMedias = mediaRepository.deleteAllByPostId(post_id);
-                //String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + post_id}; //enable this if you
+                String[] path = {"/bin/sh", "-c", "rm -rf " + userFolder + "/Post_" + post_id}; //enable this if you
                 //wana add it to docker
                 Runtime.getRuntime().exec(path);
                 return deletedMedias+" rows Deleted successfully !";
