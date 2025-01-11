@@ -67,6 +67,16 @@ public class UserService {
         user.setDeletedAt(LocalDateTime.now());
         userRepository.save(user);
     }
+    public void deleteUsersPermanentlyAfter30Days() {
+        LocalDateTime thresholdDate = LocalDateTime.now().minusDays(30);
+        List<User> usersToDelete = userRepository.findAllByDeletedAtBefore(thresholdDate);
+        if (!usersToDelete.isEmpty()) {
+            log.info("Deleting {} users permanently", usersToDelete.size());
+            userRepository.deleteAll(usersToDelete);
+        } else {
+            log.info("No users found for permanent deletion.");
+        }
+    }
 
     public void reactivateUser(Long id) {
         User user = userRepository.findById(id)
@@ -97,4 +107,5 @@ public class UserService {
         User saved = userRepository.save(user);
         return userMapper.userToUserResponseDto(saved);
     }
+
 }
