@@ -185,15 +185,19 @@ services:
       - post-db
 
   post-db:
-    image: mvertes/alpine-mongo
+    image: mongo:7.0.5
     container_name: post-db
     volumes:
       - ./storage/post-db:/data/db
     restart: always
     environment:
+      MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: post
     ports:
       - "27017:27017"
+    expose:
+      - "27017"
     
 
 
@@ -229,7 +233,7 @@ services:
       - media-db
 
   media-db:
-    image: mvertes/alpine-mongo
+    image: mongo:7.0.5
     container_name: media-db
     volumes:
       - ./storage/media-db:/data/db

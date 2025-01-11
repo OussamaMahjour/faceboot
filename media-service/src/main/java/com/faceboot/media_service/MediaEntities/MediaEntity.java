@@ -2,6 +2,7 @@ package com.faceboot.media_service.MediaEntities;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;
 
@@ -30,6 +31,7 @@ public class MediaEntity {
         this.path = path;
 
     }
+
     public MediaEntity() {
         this.id = UUID.randomUUID().toString();
     }
