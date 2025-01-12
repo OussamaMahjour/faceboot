@@ -3,6 +3,7 @@ import com.faceboot.media_service.MediaDTO.MediaResponseDTO;
 import com.faceboot.media_service.MediaServices.MediaServiceInterface;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class MediaController {
     @GetMapping("/post/{post_id}")
     public List<Optional<MediaResponseDTO>> findPostMedia(@PathVariable String post_id) {
         return mediaService.findByPostId(post_id);
+
     }
 
     @PostMapping("/upload")

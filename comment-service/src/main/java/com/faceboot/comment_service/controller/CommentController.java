@@ -3,6 +3,7 @@ package com.faceboot.comment_service.controller;
 import com.faceboot.comment_service.dto.CommentRequestDTO;
 import com.faceboot.comment_service.dto.CommentResponseDTO;
 import com.faceboot.comment_service.entity.Comment;
+import com.faceboot.comment_service.model.Post;
 import com.faceboot.comment_service.repository.CommentRepository;
 import com.faceboot.comment_service.service.CommentService;
 import com.faceboot.comment_service.service.CommentServiceInterface;
@@ -48,5 +49,7 @@ public class CommentController {
     public List<CommentResponseDTO> byPost(@PathVariable("postId") String postId) {
         return commentServiceInterface.getAllCommentsByPostId(postId);
     }
+
+
 
 }

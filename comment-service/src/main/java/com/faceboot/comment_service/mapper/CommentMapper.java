@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommentMapper implements CommentMapperInterface {
 
-    private final UserClientMock userClient;
+    private final UserClient userClient;
     private final PostClientMock postClient;
 
 
